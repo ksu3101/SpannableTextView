@@ -7,6 +7,7 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DimenRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -251,8 +252,20 @@ public class SpannableTextView
     public Span(@NonNull SpannableTextView textView, @NonNull String text) {
       this.tv = textView;
       this.text = text;
+      init();
+    }
+
+    public Span(@NonNull SpannableTextView textView, @StringRes int textResId) {
+      if (checkContextInstance()) {
+        this.tv = textView;
+        this.text = context.getString(textResId);
+      }
+      init();
+    }
+
+    private void init() {
       this.textSize = SpannableTextView.DEFAULT_TEXT_SIZE;
-      this.typedValue = TextDimenTyped.SP;
+      this.typedValue = TextDimenTyped.PX;
       this.textColor = DEFAULT_TEXT_COLOR;
       this.linkTextColor = DEFAULT_LINK_TEXT_COLOR;
       this.textBackgroundColor = DEFAULT_TEXT_BG_COLOR;
@@ -425,16 +438,14 @@ public class SpannableTextView
     }
 
     public Span build() {
-      tv.addSpan(this);
       return this;
     }
 
     public Span build(int specificIndex) {
-      tv.addSpan(this, specificIndex);
       return this;
     }
 
-    public boolean checkContextInstance() {
+    private boolean checkContextInstance() {
       if (context != null) {
         return true;
       }
