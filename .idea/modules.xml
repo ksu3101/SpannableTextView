@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/SpannableTextView.iml" filepath="$PROJECT_DIR$/SpannableTextView.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/libspannabletextview/libspannabletextview.iml" filepath="$PROJECT_DIR$/libspannabletextview/libspannabletextview.iml" />
     </modules>
   </component>
 </project>
