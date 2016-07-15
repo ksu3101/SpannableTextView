@@ -25,17 +25,17 @@ dependencies {
 ### 3. use guide
  [Sample Activity](https://github.com/ksu3101/SpannableTextView/blob/master/app/src/main/java/kr/swkang/sample/SampleMainActivity.java)  
 #### 3.1 사용 예
-```
-SpannableTextView stv1 = (SpannableTextView) findViewById(R.id.stv_1);
+```java
+    SpannableTextView stv1 = (SpannableTextView) findViewById(R.id.stv_1);
 
-SpannableTextView.Span span = new SpannableTextView.Span(stv1, "Hello World!!! ")
+    SpannableTextView.Span span = new SpannableTextView.Span(stv1, "Hello World!!! ")
         .textColor(Color.GRAY)
         .bold()
         .textSizeSP(26)
         .build();
-stv1.addSpan(span);
-    
-stv1.addSpan(
+    stv1.addSpan(span);
+
+    stv1.addSpan(
         new SpannableTextView.Span(stv1, "(Click Link)")
             .click(
                 new ClickableSpan() {
@@ -48,8 +48,8 @@ stv1.addSpan(
             .linkTextColorRes(R.color.colorPrimary)
             .build()
     );
-    
-SpannableTextView stv2 = (SpannableTextView) findViewById(R.id.stv_2);
+
+    SpannableTextView stv2 = (SpannableTextView) findViewById(R.id.stv_2);
     stv2.addSpan(
         new SpannableTextView.Span(stv2, R.string.rtext1)
             .textSizeSP(16)
