@@ -22,6 +22,7 @@ dependencies {
 }
 ```  
    
+---
 ### 3. use guide
  [Sample Activity](https://github.com/ksu3101/SpannableTextView/blob/master/app/src/main/java/kr/swkang/sample/SampleMainActivity.java)  
 #### 3.1 사용 예
@@ -59,6 +60,7 @@ dependencies {
     );
 ```
 
+---
 ### 4. license
 ```
  * ----------------------------------------------------------------------------
