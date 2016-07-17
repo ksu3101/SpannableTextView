@@ -18,9 +18,20 @@
       android:layout_marginBottom="12dp"/>
 
    <kr.swkang.spannabletextview.SpannableTextView
+      android:id="@+id/stv_2_2"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="12dp"/>
+
+   <kr.swkang.spannabletextview.SpannableTextView
       android:id="@+id/stv_3"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginBottom="12dp"/>
+
+   <kr.swkang.spannabletextview.SpannableTextView
+      android:id="@+id/stv_4"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"/>
 
 </LinearLayout>

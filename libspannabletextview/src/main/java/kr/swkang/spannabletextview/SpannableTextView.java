@@ -1,25 +1,32 @@
 package kr.swkang.spannabletextview;
 
 import android.content.Context;
+import android.graphics.BlurMaskFilter;
 import android.graphics.Color;
+import android.graphics.EmbossMaskFilter;
 import android.graphics.Typeface;
 import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DimenRes;
+import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.MaskFilterSpan;
+import android.text.style.ScaleXSpan;
 import android.text.style.StrikethroughSpan;
 import android.text.style.StyleSpan;
 import android.text.style.SubscriptSpan;
 import android.text.style.SuperscriptSpan;
+import android.text.style.TypefaceSpan;
 import android.text.style.UnderlineSpan;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -27,6 +34,7 @@ import android.util.TypedValue;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import kr.swkang.spannabletextview.utils.TextDimenTyped;
 
@@ -217,6 +225,46 @@ public class SpannableTextView
         setLinkTextColor(span.linkTextColor);
       }
 
+      // scale x
+      if (span.scaleX > 0) {
+        spannableString.setSpan(
+            new ScaleXSpan(span.scaleX),
+            cursor,
+            cursor + span.text.length(),
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        );
+      }
+
+      // blur mask filter
+      if (span.blurMaskFilter != null) {
+        spannableString.setSpan(
+            new MaskFilterSpan(span.blurMaskFilter),
+            cursor,
+            cursor + span.text.length(),
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        );
+      }
+
+      // emboss mask filter
+      if (span.embossMaskFilter != null) {
+        spannableString.setSpan(
+            new MaskFilterSpan(span.embossMaskFilter),
+            cursor,
+            cursor + span.text.length(),
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        );
+      }
+
+      // type face
+      if (span.typeFace != null && !span.typeFace.isEmpty()) {
+        spannableString.setSpan(
+            new TypefaceSpan(span.typeFace),
+            cursor,
+            cursor + span.text.length(),
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        );
+      }
+
       cursor = cursor + span.text.length();
     }
 
@@ -232,32 +280,33 @@ public class SpannableTextView
 
 
   public static class Span {
-    private SpannableTextView tv;
-    private String            text;
-    private int               textSize;
-    private TextDimenTyped    typedValue;
-    private int               textColor;
-    private int               linkTextColor;
-    private int               textBackgroundColor;
-    private boolean           bold;
-    private boolean           italic;
-    private boolean           underline;
-    private boolean           strike;
-    private boolean           superScript;
-    private boolean           subScript;
-    private ClickableSpan     clickableSpan;
-    private int               linkHighlightColor;
-    private boolean           linkClickEnable;
+    private String           text;
+    private int              textSize;
+    private TextDimenTyped   typedValue;
+    private int              textColor;
+    private int              linkTextColor;
+    private int              textBackgroundColor;
+    private boolean          bold;
+    private boolean          italic;
+    private boolean          underline;
+    private boolean          strike;
+    private boolean          superScript;
+    private boolean          subScript;
+    private ClickableSpan    clickableSpan;
+    private int              linkHighlightColor;
+    private boolean          linkClickEnable;
+    private float            scaleX;
+    private BlurMaskFilter   blurMaskFilter;
+    private EmbossMaskFilter embossMaskFilter;
+    private String           typeFace;
 
-    public Span(@NonNull SpannableTextView textView, @NonNull String text) {
-      this.tv = textView;
+    public Span(@NonNull String text) {
       this.text = text;
       init();
     }
 
-    public Span(@NonNull SpannableTextView textView, @StringRes int textResId) {
+    public Span(@StringRes int textResId) {
       if (checkContextInstance()) {
-        this.tv = textView;
         this.text = context.getString(textResId);
       }
       init();
@@ -278,6 +327,10 @@ public class SpannableTextView
       this.clickableSpan = null;
       this.linkHighlightColor = DEFAULT_LINK_TEXT_COLOR;
       this.linkClickEnable = true;
+      this.scaleX = 0.0f;
+      this.blurMaskFilter = null;
+      this.embossMaskFilter = null;
+      this.typeFace = null;
     }
 
     public Span text(@NonNull String text) {
@@ -434,6 +487,31 @@ public class SpannableTextView
 
     public Span linkClickDisable() {
       this.linkClickEnable = false;
+      return this;
+    }
+
+    public Span scaleX(float scaleX) {
+      this.scaleX = scaleX;
+      return this;
+    }
+
+    public Span blurMaskFilter(@FloatRange(from = 0) float radius) {
+      this.blurMaskFilter = new BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL);
+      return this;
+    }
+
+    public Span blurMaskFilter(@FloatRange(from = 0) float radius, BlurMaskFilter.Blur blurStyle) {
+      this.blurMaskFilter = new BlurMaskFilter(radius, blurStyle);
+      return this;
+    }
+
+    public Span embossMaskFilter(@NonNull float[] direction, float ambient, float specular, float blurRadius) {
+      this.embossMaskFilter = new EmbossMaskFilter(direction, ambient, specular, blurRadius);
+      return this;
+    }
+
+    public Span typeFaceFamily(@NonNull String fontFamily) {
+      this.typeFace = fontFamily;
       return this;
     }
 
