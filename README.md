@@ -10,9 +10,16 @@
   - super script 
   - sub script
   - clickable span string  
-  - [NEW] Blur Mask Filter (jcenter 업로드 예정)
-  - [NEW] Emboss Mask Filter (jcenter 업로드 예정)
-  - [NEW] Scale X (jcenter 업로드 예정)
+
+### TODO List  
+- ver 0.0.2
+  - [x] Blur Mask Filter (jcenter 업로드 예정)
+  - [x] Emboss Mask Filter (jcenter 업로드 예정)
+  - [x] Scale X (jcenter 업로드 예정)
+
+- ver 0.0.3
+  - [ ] '#', '@' 태그 링크 (style, click envent)
+  - [ ] 사용자 `Pattern` 적용 (style, click envent)
   
 ### 1. screen shot
 ![screen shot image](https://github.com/ksu3101/TIL/blob/master/Android/images/spannable_tv_sample.jpg)
