@@ -1,6 +1,7 @@
 package kr.swkang.sample;
 
 import android.app.Activity;
+import android.graphics.BlurMaskFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextPaint;
@@ -25,7 +26,7 @@ public class SampleMainActivity
 
     SpannableTextView stv1 = (SpannableTextView) findViewById(R.id.stv_1);
 
-    final SpannableTextView.Span span = new SpannableTextView.Span(stv1, "Hello World!!! ")
+    final SpannableTextView.Span span = new SpannableTextView.Span("Hello World!!! ")
         .textColor(Color.GRAY)
         .bold()
         .textSizeSP(26)
@@ -33,25 +34,25 @@ public class SampleMainActivity
     stv1.addSpan(span);
 
     stv1.addSpan(
-        new SpannableTextView.Span(stv1, "\n반가워요!! ")
+        new SpannableTextView.Span("\n반가워요!! ")
             .textColorRes(R.color.colorAccent)
             .italic()
             .textSizePX(getResources().getDimensionPixelSize(R.dimen.textsize_def))
             .build()
     );
     stv1.addSpan(
-        new SpannableTextView.Span(stv1, " :)  ")
+        new SpannableTextView.Span(" :)  ")
             .textColor(Color.rgb(100, 100, 100))
             .build()
     );
 
     stv1.addSpan(
-        new SpannableTextView.Span(stv1, "(Click Link)")
+        new SpannableTextView.Span("(Click Link)")
             .click(
                 new ClickableSpan() {
                   @Override
                   public void onClick(View widget) {
-                    Toast.makeText(SampleMainActivity.this, "첫번째 링크를 터치 했습니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SampleMainActivity.this, "Touched link one.", Toast.LENGTH_SHORT).show();
                   }
                 }
             )
@@ -60,17 +61,17 @@ public class SampleMainActivity
     );
 
     stv1.addSpan(
-        new SpannableTextView.Span(stv1, " // ")
+        new SpannableTextView.Span(" // ")
             .build()
     );
 
     stv1.addSpan(
-        new SpannableTextView.Span(stv1, "(Touch this)")
+        new SpannableTextView.Span("(Touch this)")
             .click(
                 new ClickableSpan() {
                   @Override
                   public void onClick(View widget) {
-                    Toast.makeText(SampleMainActivity.this, "두번째 링크를 터치 했습니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SampleMainActivity.this, "Touched link two.", Toast.LENGTH_SHORT).show();
                   }
 
                   @Override
@@ -86,20 +87,42 @@ public class SampleMainActivity
             .build()
     );
 
+    stv1.addSpan(
+        new SpannableTextView.Span("\nscale X(2.0f)")
+            .textSizeSP(16)
+            .scaleX(2.0f)
+            .build()
+    );
+
     //stv1.clearSpans();
 
     SpannableTextView stv2 = (SpannableTextView) findViewById(R.id.stv_2);
     stv2.addSpan(
-        new SpannableTextView.Span(stv2, R.string.rtext1)
+        new SpannableTextView.Span("Blurred Text (Normal)")
+            .textSizeSP(20)
+            .blurMaskFilter(5)
+            .build()
+    );
+    SpannableTextView stv22 = (SpannableTextView) findViewById(R.id.stv_2_2);
+    stv22.addSpan(
+        new SpannableTextView.Span("Blurred Text (Outer)")
+            .textSizeSP(30)
+            .blurMaskFilter(8, BlurMaskFilter.Blur.OUTER)
+            .build()
+    );
+
+    SpannableTextView stv3 = (SpannableTextView) findViewById(R.id.stv_3);
+    stv3.addSpan(
+        new SpannableTextView.Span(R.string.rtext1)
             .textSizeSP(16)
             .textColor(Color.BLACK)
             .bold()
             .build()
     );
 
-    SpannableTextView stv3 = (SpannableTextView) findViewById(R.id.stv_3);
-    stv3.addSpan(
-        new SpannableTextView.Span(stv3, R.string.rtext2)
+    SpannableTextView stv4 = (SpannableTextView) findViewById(R.id.stv_4);
+    stv4.addSpan(
+        new SpannableTextView.Span(R.string.rtext2)
             .textSizeSP(12)
             .textColor(Color.GRAY)
             .build()
