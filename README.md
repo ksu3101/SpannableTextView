@@ -21,6 +21,7 @@
   - [ ] '#', '@' 태그 링크 (style, click envent)
   - [ ] 사용자 `Pattern` 적용 (style, click envent)
   
+---
 ### 1. screen shot
 ![screen shot image](https://github.com/ksu3101/TIL/blob/master/Android/images/spannable_tv_sample.jpg)
   
