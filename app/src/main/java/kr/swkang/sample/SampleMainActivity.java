@@ -5,11 +5,11 @@ import android.graphics.BlurMaskFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextPaint;
-import android.text.style.ClickableSpan;
 import android.view.View;
 import android.widget.Toast;
 
 import kr.swkang.spannabletextview.SpannableTextView;
+import kr.swkang.spannabletextview.utils.SwClickableSpan;
 
 /**
  * @author KangSung-Woo
@@ -49,7 +49,7 @@ public class SampleMainActivity
     stv1.addSpan(
         new SpannableTextView.Span("(Click Link)")
             .click(
-                new ClickableSpan() {
+                new SwClickableSpan() {
                   @Override
                   public void onClick(View widget) {
                     Toast.makeText(SampleMainActivity.this, "Touched link one.", Toast.LENGTH_SHORT).show();
@@ -68,7 +68,7 @@ public class SampleMainActivity
     stv1.addSpan(
         new SpannableTextView.Span("(Touch this)")
             .click(
-                new ClickableSpan() {
+                new SwClickableSpan() {
                   @Override
                   public void onClick(View widget) {
                     Toast.makeText(SampleMainActivity.this, "Touched link two.", Toast.LENGTH_SHORT).show();
@@ -125,6 +125,33 @@ public class SampleMainActivity
         new SpannableTextView.Span(R.string.rtext2)
             .textSizeSP(12)
             .textColor(Color.GRAY)
+            .findSharpTags(
+                // normal text color, pressed text color, pressed bg color
+                new SwClickableSpan(Color.BLACK, Color.RED, Color.LTGRAY) {
+                  @Override
+                  public void onClick(View widget) {
+                    Toast.makeText(SampleMainActivity.this, "# Tag clicked..", Toast.LENGTH_SHORT).show();
+                  }
+                }
+            )
+            .findAtTags(
+                // normal text color, pressed text color
+                new SwClickableSpan(Color.rgb(39, 174, 96), Color.rgb(211, 84, 0)) {
+                  @Override
+                  public void onClick(View widget) {
+                    Toast.makeText(SampleMainActivity.this, "@ Tag clicked..", Toast.LENGTH_SHORT).show();
+                  }
+                }
+            )
+            .findURLstrings(
+                // hide underline
+                new SwClickableSpan(false) {
+                  @Override
+                  public void onClick(View widget) {
+                    Toast.makeText(SampleMainActivity.this, "URL string clicked..", Toast.LENGTH_SHORT).show();
+                  }
+                }
+            )
             .build()
     );
 

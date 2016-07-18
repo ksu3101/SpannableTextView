@@ -10,15 +10,15 @@ import android.support.annotation.ColorRes;
 import android.support.annotation.DimenRes;
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
-import android.text.method.LinkMovementMethod;
+import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.BackgroundColorSpan;
-import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.MaskFilterSpan;
 import android.text.style.ScaleXSpan;
@@ -31,11 +31,16 @@ import android.text.style.UnderlineSpan;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.View;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import kr.swkang.spannabletextview.utils.RegEx;
+import kr.swkang.spannabletextview.utils.SpanLinkMovementMethod;
+import kr.swkang.spannabletextview.utils.SwClickableSpan;
 import kr.swkang.spannabletextview.utils.TextDimenTyped;
 
 /**
@@ -207,6 +212,11 @@ public class SpannableTextView
         );
       }
 
+      setLinkTextColor(Color.BLUE);
+      setHighlightColor(span.linkHighlightColor);
+      //setMovementMethod(LinkMovementMethod.getInstance());
+      setMovementMethod(new SpanLinkMovementMethod());
+
       // click event
       if (span.clickableSpan != null) {
         spannableString.setSpan(
@@ -215,9 +225,6 @@ public class SpannableTextView
             cursor + span.text.length(),
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         );
-        setLinkTextColor(Color.BLUE);
-        setHighlightColor(span.linkHighlightColor);
-        setMovementMethod(LinkMovementMethod.getInstance());
       }
       setLinksClickable(span.linkClickEnable);
 
@@ -265,6 +272,30 @@ public class SpannableTextView
         );
       }
 
+      // '#' tags
+      if (span.enableSharpTagMatcher && span.sharpTagClickSpan != null) {
+        Matcher matcher = findPatternMatcher(RegEx.REGEX_FIND_HASHTAG, span.text);
+        applyClickSpan(spannableString, matcher, span.sharpTagClickSpan);
+      }
+
+      // '@' tags
+      if (span.enableAtTagMatcher && span.atTagClickSpan != null) {
+        Matcher matcher = findPatternMatcher(RegEx.REGEX_FIND_ATTAG_TEXT, span.text);
+        applyClickSpan(spannableString, matcher, span.atTagClickSpan);
+      }
+
+      // url string
+      if (span.enableURLMatcher && span.urlClickSpan != null) {
+        Matcher matcher = findPatternMatcher(RegEx.REGEX_VALIDATE_URL, span.text);
+        applyClickSpan(spannableString, matcher, span.urlClickSpan);
+      }
+
+      // custom string regex
+      if (!TextUtils.isEmpty(span.customRegExString) && span.customClickSpan != null) {
+        Matcher matcher = findPatternMatcher(span.customRegExString, span.text);
+        applyClickSpan(spannableString, matcher, span.customClickSpan);
+      }
+
       cursor = cursor + span.text.length();
     }
 
@@ -276,6 +307,27 @@ public class SpannableTextView
       throw new IndexOutOfBoundsException("Invalid index " + index + ", size is " + spans.size());
     }
     return true;
+  }
+
+  private void applyClickSpan(@NonNull SpannableString spannableString, @NonNull Matcher m, @NonNull final SwClickableSpan clickableSpan) {
+    while (m.find()) {
+      spannableString.setSpan(
+          //CharacterStyle.wrap(clickableSpan),
+          new SwClickableSpan(clickableSpan) {
+            @Override
+            public void onClick(View widget) {
+              clickableSpan.onClick(widget);
+            }
+          },
+          m.start(),
+          m.end(),
+          Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+      );
+    }
+  }
+
+  private Matcher findPatternMatcher(@NonNull String regEx, @NonNull String target) {
+    return Pattern.compile(regEx, Pattern.UNICODE_CASE).matcher(target);
   }
 
 
@@ -292,13 +344,29 @@ public class SpannableTextView
     private boolean          strike;
     private boolean          superScript;
     private boolean          subScript;
-    private ClickableSpan    clickableSpan;
+    private SwClickableSpan  clickableSpan;
     private int              linkHighlightColor;
     private boolean          linkClickEnable;
     private float            scaleX;
     private BlurMaskFilter   blurMaskFilter;
     private EmbossMaskFilter embossMaskFilter;
     private String           typeFace;
+
+    // '#' tag
+    private boolean         enableSharpTagMatcher;
+    private SwClickableSpan sharpTagClickSpan;
+
+    // '@' tag
+    private boolean         enableAtTagMatcher;
+    private SwClickableSpan atTagClickSpan;
+
+    // url string link
+    private boolean         enableURLMatcher;
+    private SwClickableSpan urlClickSpan;
+
+    // custom regular expression link
+    private String          customRegExString;
+    private SwClickableSpan customClickSpan;
 
     public Span(@NonNull String text) {
       this.text = text;
@@ -331,17 +399,34 @@ public class SpannableTextView
       this.blurMaskFilter = null;
       this.embossMaskFilter = null;
       this.typeFace = null;
+      this.enableSharpTagMatcher = false;
+      this.sharpTagClickSpan = null;
+      this.enableAtTagMatcher = false;
+      this.atTagClickSpan = null;
+      this.enableURLMatcher = false;
+      this.urlClickSpan = null;
+      this.customRegExString = null;
+      this.customClickSpan = null;
     }
 
+    /**
+     * Sets the spannable string parts of the SpannableTextView.
+     */
     public Span text(@NonNull String text) {
       this.text = text;
       return this;
     }
 
+    /**
+     * Set the text size to a SP(Scaled Pixel) value.
+     */
     public Span textSizeSP(int textSizeSp) {
       return textSize(TextDimenTyped.SP, textSizeSp);
     }
 
+    /**
+     * Set the text size to a DIP value.
+     */
     public Span textSizeDIP(int textSizeDIP) {
       return textSize(TextDimenTyped.DIP, textSizeDIP);
     }
@@ -353,25 +438,41 @@ public class SpannableTextView
       return this;
     }
 
+    /**
+     * Set the text size to a Pixel value.
+     */
     public Span textSizePX(int textSizePx) {
       return textSize(TextDimenTyped.PX, textSizePx);
     }
 
+    /**
+     * Set the text size to a Point value.
+     */
     public Span textSizePT(int textSizePT) {
       return textSize(TextDimenTyped.PT, textSizePT);
     }
 
+    /**
+     * Set the text size to a given unit and value.
+     * TextDimenTyped is SP, DIP, PX, PT
+     */
     public Span textSize(TextDimenTyped typedValue, int textSize) {
       this.textSize = textSize;
       this.typedValue = typedValue;
       return this;
     }
 
+    /**
+     * Sets the Text color.
+     */
     public Span textColor(@ColorInt int textColor) {
       this.textColor = textColor;
       return this;
     }
 
+    /**
+     * Sets the Text color from Color Resource.
+     */
     public Span textColorRes(@ColorRes int textColorResId) {
       if (checkContextInstance()) {
         this.textColor = ContextCompat.getColor(context, textColorResId);
@@ -379,11 +480,17 @@ public class SpannableTextView
       return this;
     }
 
+    /**
+     * Sets the Hyper link text color.
+     */
     public Span linkTextColor(@ColorInt int linkTextColor) {
       this.linkTextColor = linkTextColor;
       return this;
     }
 
+    /**
+     * Sets the Hyper link text color from Color Resource.
+     */
     public Span linkTextColorRes(@ColorRes int linkTextColorResId) {
       if (checkContextInstance()) {
         this.linkTextColor = ContextCompat.getColor(context, linkTextColorResId);
@@ -391,11 +498,17 @@ public class SpannableTextView
       return this;
     }
 
+    /**
+     * Sets the text background color.
+     */
     public Span textBackgroundColor(@ColorInt int bgColor) {
       this.textBackgroundColor = bgColor;
       return this;
     }
 
+    /**
+     * Sets the text background color from Color Resource.
+     */
     public Span textBackgroundColorRes(@ColorRes int bgColorResId) {
       if (checkContextInstance()) {
         this.textBackgroundColor = ContextCompat.getColor(context, bgColorResId);
@@ -463,7 +576,7 @@ public class SpannableTextView
       return this;
     }
 
-    public Span click(@NonNull ClickableSpan clickableSpan) {
+    public Span click(@NonNull SwClickableSpan clickableSpan) {
       this.clickableSpan = clickableSpan;
       return this;
     }
@@ -515,11 +628,31 @@ public class SpannableTextView
       return this;
     }
 
-    public Span build() {
+    public Span findSharpTags(@Nullable SwClickableSpan clickableSpan) {
+      this.enableSharpTagMatcher = true;
+      this.sharpTagClickSpan = clickableSpan;
       return this;
     }
 
-    public Span build(int specificIndex) {
+    public Span findAtTags(@Nullable SwClickableSpan clickableSpan) {
+      this.enableAtTagMatcher = true;
+      this.atTagClickSpan = clickableSpan;
+      return this;
+    }
+
+    public Span findURLstrings(@Nullable SwClickableSpan clickableSpan) {
+      this.enableURLMatcher = true;
+      this.urlClickSpan = clickableSpan;
+      return this;
+    }
+
+    public Span findRegExStrings(@NonNull String regEx, @Nullable SwClickableSpan clickableSpan) {
+      this.customRegExString = regEx;
+      this.customClickSpan = clickableSpan;
+      return this;
+    }
+
+    public Span build() {
       return this;
     }
 
@@ -532,6 +665,6 @@ public class SpannableTextView
       }
     }
 
-  }
+  } // end of Builder class `Span`
 
 }
