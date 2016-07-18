@@ -26,7 +26,15 @@
  - `blurMaskFilter(float, BlurMaskFilter.Blur blurStyle)` : 텍스트에 블러마스크필터 효과를 줍니다. blurstyle을 바꿀 수 있습니다. (`NORMAL`, `SOLID`, `OUTER`, `INNER`)  
 - `embossMaskFilter(float[] direction, float ambient, float specular, float blurRadius)` : 엠보싱효과를 텍스트에 줍니다. 
 - `typeFaceFamily(String fontFamily)` : 텍스트의 폰트를 변경 합니다. 폰트가 디바이스에서 설치 되어 있어야 합니다.  
-  
+ 
+#### ver 0.0.3
+ - `findRegExStrings(String regEx, SwClickableSpan clickSpan)` : 사용자 정규식을 통해 단어를 찾고 링크를 설정 합니다.
+  - `findSharpTags(SwClickableSpan)` : '#'으로 시작되는 단어를 찾고 링크를 설정 합니다. 
+  - `findAtTags(SwClickableSpan)` : '@'으로 시작되는 단어를 찾고 링크를 설정 합니다. 
+  - `findURLstrings(SwClickableSpan)` : URL으로 구성된 단어를 찾고 링크를 설정 합니다. 
+ - `SwClickableSpan` class
+  - `ClickableSpan`을 상속한 클래스로서 터치 여부에 따라 텍스트 컬러, 배경 컬러등을 설정 할 수 있습니다. 
+   
 ---
 ### TODO List  
 - ver 0.0.2
