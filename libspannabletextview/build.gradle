@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion 23
@@ -22,4 +23,15 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.4.0'
+}
+
+publish {
+    userOrg = 'burkdog'
+    groupId = 'kr.swkang.spannabletextview'
+    artifactId = 'libspannabletextview'
+    publishVersion = '0.0.2'
+    desc = 'Spannable TextView'
+    website = 'https://github.com/ksu3101/SpannableTextView'
+    issueTracker = 'https://github.com/ksu3101/SpannableTextView/issues'
+    repository = 'https://github.com/ksu3101/SpannableTextView.git'
 }
