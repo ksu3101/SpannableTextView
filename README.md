@@ -21,11 +21,19 @@
    - `linkClickEnable(), linkClickDisable()` : 클릭 이벤트의 적용 유무를 설정 합니다. 
    - `linkTextColor()` : 클릭 이벤트를 받는 텍스트의 컬러를 변경 해 줍니다. 
 
+#### ver 0.0.2  
+- `blurMaskFilter(float radius)` : 텍스트에 블러마스크 필터 효과를 줍니다. 텍스트 폰트 사이즈가 작을 경우 블러효과가 갱신되지 않을 수 있습니다.  
+ - `blurMaskFilter(float, BlurMaskFilter.Blur blurStyle)` : 텍스트에 블러마스크필터 효과를 줍니다. blurstyle을 바꿀 수 있습니다. (`NORMAL`, `SOLID`, `OUTER`, `INNER`)  
+- `embossMaskFilter(float[] direction, float ambient, float specular, float blurRadius)` : 엠보싱효과를 텍스트에 줍니다. 
+- `typeFaceFamily(String fontFamily)` : 텍스트의 폰트를 변경 합니다. 폰트가 디바이스에서 설치 되어 있어야 합니다.  
+  
+---
 ### TODO List  
 - ver 0.0.2
-  - [x] Blur Mask Filter (jcenter 업로드 예정)
-  - [x] Emboss Mask Filter (jcenter 업로드 예정)
-  - [x] Scale X (jcenter 업로드 예정)
+  - [x] Blur Mask Filter Span
+  - [x] Emboss Mask Filter Span 
+  - [x] Scale X Span 
+  - [x] typeFace Span
 
 - ver 0.0.3
   - [ ] '#', '@' 태그 링크 (style, click envent)
@@ -35,11 +43,12 @@
 ### 1. screen shot
 ![screen shot image](https://github.com/ksu3101/TIL/blob/master/Android/images/spannable_tv_sample.jpg)
   
+---
 ### 2. install
  아래의 내용을 app의 `build.gradle`에 추가 해 주세요. 
 ```
 dependencies {
-  compile 'kr.swkang.spannabletextview:libspannabletextview:0.0.1'
+  compile 'kr.swkang.spannabletextview:libspannabletextview:0.0.2'
 }
 ```  
    
