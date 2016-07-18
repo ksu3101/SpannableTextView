@@ -1,4 +1,5 @@
-## SpannableTextView
+## SpannableTextView  
+[![Download](https://api.bintray.com/packages/burkdog/maven/libspannabletextview/images/download.svg) ](https://bintray.com/burkdog/maven/libspannabletextview/_latestVersion)  
  Spannable을 이용한 텍스트뷰 입니다. 텍스트 컬러, bold, italic 등 다양한 효과를 텍스트 뷰에 적용 할 수 있습니다. 지원되는 효과는 다음과 같습니다.
   - `text(String str)` : spannable을 적용할 텍스트 문구. 
   - `textSize(TextDimenTyped typed, int sizeValue)` : 텍스트의 크기와 단위(`SP, DIP, PX, PT`)를 설정 합니다. 
