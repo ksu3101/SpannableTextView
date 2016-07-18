@@ -36,8 +36,12 @@
   - [x] typeFace Span
 
 - ver 0.0.3
-  - [ ] '#', '@' 태그 링크 (style, click envent)
-  - [ ] 사용자 `Pattern` 적용 (style, click envent)
+  - [x] '#', '@' 태그 링크 (style, click envent)
+  - [x] 사용자 `Pattern` 적용 (style, click envent)
+   
+- ver 0.0.4
+  - [ ] image span, 미구현된 span들 추가. 
+  - [ ] bug fix
   
 ---
 ### 1. screen shot
@@ -48,7 +52,7 @@
  아래의 내용을 app의 `build.gradle`에 추가 해 주세요. 
 ```
 dependencies {
-  compile 'kr.swkang.spannabletextview:libspannabletextview:0.0.2'
+  compile 'kr.swkang.spannabletextview:libspannabletextview:0.0.3'
 }
 ```  
    
@@ -68,7 +72,7 @@ dependencies {
 ```java
     SpannableTextView stv1 = (SpannableTextView) findViewById(R.id.stv_1);
 
-    // Span 인스턴스를 따로 만들고 관리 하는 방법. 
+    // Span인스턴스를 따로 만들고 관리 하는 방법. 
     final SpannableTextView.Span span = new SpannableTextView.Span("Hello World!!! ")
         .textColor(Color.GRAY)
         .bold()
@@ -76,7 +80,7 @@ dependencies {
         .build();
     stv1.addSpan(span);
 
-    // 바로 인스턴스를 생성하고 항목을 설정 하는 방법. 
+    // 바로 Span인스턴스를 생성하고 항목을 설정 하는 방법 
     stv1.addSpan(
         new SpannableTextView.Span("\n반가워요!! ")
             .textColorRes(R.color.colorAccent)
@@ -90,14 +94,13 @@ dependencies {
             .build()
     );
 
-    // 클릭 이벤트를 구현하여 콜백 받는 방법. 
+    // 클릭 이벤트의 구현 
     stv1.addSpan(
         new SpannableTextView.Span("(Click Link)")
             .click(
-                new ClickableSpan() {
+                new SwClickableSpan() {
                   @Override
                   public void onClick(View widget) {
-                    // 이곳에서 클릭에 대한 이벤트를 처리 하면 됩니다. 
                     Toast.makeText(SampleMainActivity.this, "Touched link one.", Toast.LENGTH_SHORT).show();
                   }
                 }
@@ -114,7 +117,7 @@ dependencies {
     stv1.addSpan(
         new SpannableTextView.Span("(Touch this)")
             .click(
-                new ClickableSpan() {
+                new SwClickableSpan() {
                   @Override
                   public void onClick(View widget) {
                     Toast.makeText(SampleMainActivity.this, "Touched link two.", Toast.LENGTH_SHORT).show();
@@ -142,7 +145,7 @@ dependencies {
 
     //stv1.clearSpans();
 
-    // 텍스트에 블러 마스크 필터 주기. 
+    // 텍스트에 블러 마스크 추가 
     SpannableTextView stv2 = (SpannableTextView) findViewById(R.id.stv_2);
     stv2.addSpan(
         new SpannableTextView.Span("Blurred Text (Normal)")
@@ -150,7 +153,6 @@ dependencies {
             .blurMaskFilter(5)
             .build()
     );
-    // 텍스트에 블러 마스크 필터 (아우터) 주기. 
     SpannableTextView stv22 = (SpannableTextView) findViewById(R.id.stv_2_2);
     stv22.addSpan(
         new SpannableTextView.Span("Blurred Text (Outer)")
@@ -173,6 +175,33 @@ dependencies {
         new SpannableTextView.Span(R.string.rtext2)
             .textSizeSP(12)
             .textColor(Color.GRAY)
+            .findSharpTags(
+                // normal text color, pressed text color, pressed bg color
+                new SwClickableSpan(Color.BLACK, Color.RED, Color.LTGRAY) {
+                  @Override
+                  public void onClick(View widget) {
+                    Toast.makeText(SampleMainActivity.this, "# Tag clicked..", Toast.LENGTH_SHORT).show();
+                  }
+                }
+            )
+            .findAtTags(
+                // normal text color, pressed text color
+                new SwClickableSpan(Color.rgb(39, 174, 96), Color.rgb(211, 84, 0)) {
+                  @Override
+                  public void onClick(View widget) {
+                    Toast.makeText(SampleMainActivity.this, "@ Tag clicked..", Toast.LENGTH_SHORT).show();
+                  }
+                }
+            )
+            .findURLstrings(
+                // hide underline
+                new SwClickableSpan(false) {
+                  @Override
+                  public void onClick(View widget) {
+                    Toast.makeText(SampleMainActivity.this, "URL string clicked..", Toast.LENGTH_SHORT).show();
+                  }
+                }
+            )
             .build()
     );
 ```
