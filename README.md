@@ -1,6 +1,10 @@
 ## SpannableTextView  
 [![Download](https://api.bintray.com/packages/burkdog/maven/libspannabletextview/images/download.svg) ](https://bintray.com/burkdog/maven/libspannabletextview/_latestVersion)  
- Spannable을 이용한 텍스트뷰 입니다. 텍스트 컬러, bold, italic 등 다양한 효과를 텍스트 뷰에 적용 할 수 있습니다. 지원되는 효과는 다음과 같습니다.
+
+ Spannable을 이용한 텍스트뷰 입니다. 텍스트 컬러, bold, italic 등 다양한 효과를 텍스트 뷰에 적용 할 수 있습니다. 지원되는 효과는 다음과 같습니다.  
+ ![screen shot image](https://github.com/ksu3101/TIL/blob/master/Android/images/spannable_tv_sample2.jpg)
+   
+ --- 
   - `text(String str)` : spannable을 적용할 텍스트 문구. 
   - `textSize(TextDimenTyped typed, int sizeValue)` : 텍스트의 크기와 단위(`SP, DIP, PX, PT`)를 설정 합니다. 
    - `textSizeSP()` : SP단위의 텍스트 크기를 설정 합니다. 
@@ -53,11 +57,7 @@
   - [ ] bug fix
   
 ---
-### 1. screen shot
-![screen shot image](https://github.com/ksu3101/TIL/blob/master/Android/images/spannable_tv_sample2.jpg)
-  
----
-### 2. install
+### 1. install
  아래의 내용을 app의 `build.gradle`에 추가 해 주세요. 
 ```
 dependencies {
@@ -66,12 +66,12 @@ dependencies {
 ```  
    
 ---
-### 3. use guide
+### 2. use guide
  [Sample Activity](https://github.com/ksu3101/SpannableTextView/blob/master/app/src/main/java/kr/swkang/sample/SampleMainActivity.java)  
  - `ClickableSpan`의 경우 밑줄이 자동으로 생기는데 이를 없애기 위해선 아래와 같이 구현된 `ClickableSpan`내에서 `updateDrawState()`메소드를 재정의 하여 `TextPaint`객체의 `setUnderlineText(false)`메소드를 호출 해야 합니다. 이때 패러미터로 `false`를 주면 됩니다. 이 경우, `unUnderLine()`메소드를 통해서 밑줄이 사라지진 않습니다. 
  - 기본 텍스트뷰의 폰트 사이즈는 xml layout에서 설정한 텍스트 폰트 사이즈 입니다. 만약 xml layout에서 textSize항목을 설정 하지 않았다면 안드로이드의 기본 폰트 사이즈가 적용 됩니다. 
 
-#### 3.1 사용 예
+#### 2.1 사용 예
 ```xml
    <kr.swkang.spannabletextview.SpannableTextView
       android:id="@+id/stv_1"
@@ -216,7 +216,7 @@ dependencies {
 ```
 
 ---
-### 4. license
+### license
 ```
  * ----------------------------------------------------------------------------
  * "THE BEER-WARE LICENSE" (Revision 1):
