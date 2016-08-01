@@ -69,7 +69,7 @@
  아래의 내용을 app의 `build.gradle`에 추가 해 주세요. 
 ```groovy
 dependencies {
-  compile 'kr.swkang.spannabletextview:libspannabletextview:0.0.3'
+  compile 'kr.swkang.spannabletextview:libspannabletextview:1.0.0'
 }
 ```  
    
