@@ -29,7 +29,7 @@ publish {
     userOrg = 'burkdog'
     groupId = 'kr.swkang.spannabletextview'
     artifactId = 'libspannabletextview'
-    publishVersion = '0.0.3'
+    publishVersion = '1.0.0'
     desc = 'Spannable TextView'
     website = 'https://github.com/ksu3101/SpannableTextView'
     issueTracker = 'https://github.com/ksu3101/SpannableTextView/issues'
