@@ -39,6 +39,12 @@
  - `SwClickableSpan` class
   - `ClickableSpan`을 상속한 클래스로서 터치 여부에 따라 텍스트 컬러, 배경 컬러등을 설정 할 수 있습니다. 
    
+#### ver 1.0.0
+ - `findRegExStrings(String regEx, ColorInt)` : 사용자 정규식을 통해 단어를 찾고 링크를 설정 합니다.
+  - `findSharpTags(ColorInt)` : '#'으로 시작되는 단어를 찾고 링크를 설정 합니다. 
+  - `findAtTags(ColorInt)` : '@'으로 시작되는 단어를 찾고 링크를 설정 합니다. 
+  - `findURLstrings(ColorInt)` : URL으로 구성된 단어를 찾고 링크를 설정 합니다.  
+
 ---
 ### TODO List  
 - ver 0.0.2
@@ -50,8 +56,11 @@
 - ver 0.0.3
   - [x] '#', '@' 태그 링크 (style, click envent)
   - [x] 사용자 `Pattern` 적용 (style, click envent)
+  
+- ver 1.0.0
+  - [x] '#', '@', 사용자 패턴 적용된 텍스트에 `SwClickableSpan`이 아닌 텍스트 컬러 지정할 수 있게 설정. 
    
-- ver 0.0.4
+- ver 1.0.1
   - [ ] image span, 미구현된 span들 추가. 
   - [ ] bug fix
   
