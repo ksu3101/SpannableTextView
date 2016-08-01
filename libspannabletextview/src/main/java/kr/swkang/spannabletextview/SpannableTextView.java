@@ -273,27 +273,63 @@ public class SpannableTextView
       }
 
       // '#' tags
-      if (span.enableSharpTagMatcher && span.sharpTagClickSpan != null) {
+      if (span.enableSharpTagMatcher) {
         Matcher matcher = findPatternMatcher(RegEx.REGEX_FIND_HASHTAG, span.text);
-        applyClickSpan(spannableString, matcher, span.sharpTagClickSpan);
+        if (span.sharpTagClickSpan != null) {
+          applyClickSpan(spannableString, matcher, span.sharpTagClickSpan);
+        }
+        else if (span.sharpTagTextColor != -1) {
+          applyForegroundTextColorSpan(spannableString, matcher, span.sharpTagTextColor);
+        }
+        else {
+          // to Default
+          applyForegroundTextColorSpan(spannableString, matcher, span.linkTextColor);
+        }
       }
 
       // '@' tags
       if (span.enableAtTagMatcher && span.atTagClickSpan != null) {
         Matcher matcher = findPatternMatcher(RegEx.REGEX_FIND_ATTAG_TEXT, span.text);
-        applyClickSpan(spannableString, matcher, span.atTagClickSpan);
+        if (span.atTagClickSpan != null) {
+          applyClickSpan(spannableString, matcher, span.atTagClickSpan);
+        }
+        else if (span.atTagTextColor != -1) {
+          applyForegroundTextColorSpan(spannableString, matcher, span.atTagTextColor);
+        }
+        else {
+          // to Default
+          applyForegroundTextColorSpan(spannableString, matcher, span.linkTextColor);
+        }
       }
 
       // url string
       if (span.enableURLMatcher && span.urlClickSpan != null) {
         Matcher matcher = findPatternMatcher(RegEx.REGEX_VALIDATE_URL, span.text);
-        applyClickSpan(spannableString, matcher, span.urlClickSpan);
+        if (span.urlClickSpan != null) {
+          applyClickSpan(spannableString, matcher, span.urlClickSpan);
+        }
+        else if (span.urlStringColor != -1) {
+          applyForegroundTextColorSpan(spannableString, matcher, span.urlStringColor);
+        }
+        else {
+          // to Default
+          applyForegroundTextColorSpan(spannableString, matcher, span.linkTextColor);
+        }
       }
 
       // custom string regex
       if (!TextUtils.isEmpty(span.customRegExString) && span.customClickSpan != null) {
         Matcher matcher = findPatternMatcher(span.customRegExString, span.text);
-        applyClickSpan(spannableString, matcher, span.customClickSpan);
+        if (span.customClickSpan != null) {
+          applyClickSpan(spannableString, matcher, span.customClickSpan);
+        }
+        else if (span.regExTextColor != -1) {
+          applyForegroundTextColorSpan(spannableString, matcher, span.regExTextColor);
+        }
+        else {
+          // to Default
+          applyForegroundTextColorSpan(spannableString, matcher, span.linkTextColor);
+        }
       }
 
       cursor = cursor + span.text.length();
@@ -307,6 +343,21 @@ public class SpannableTextView
       throw new IndexOutOfBoundsException("Invalid index " + index + ", size is " + spans.size());
     }
     return true;
+  }
+
+  private void applyForegroundTextColorSpan(@NonNull SpannableString spannableString, @NonNull Matcher m, @ColorInt int textColor) {
+    if (textColor == -1) {
+      // defence code
+      textColor = Color.BLUE;
+    }
+    while (m.find()) {
+      spannableString.setSpan(
+          new ForegroundColorSpan(textColor),
+          m.start(),
+          m.end(),
+          Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+      );
+    }
   }
 
   private void applyClickSpan(@NonNull SpannableString spannableString, @NonNull Matcher m, @NonNull final SwClickableSpan clickableSpan) {
@@ -331,6 +382,9 @@ public class SpannableTextView
   }
 
 
+  /**
+   * Builder `Span` Class
+   */
   public static class Span {
     private String           text;
     private int              textSize;
@@ -351,6 +405,10 @@ public class SpannableTextView
     private BlurMaskFilter   blurMaskFilter;
     private EmbossMaskFilter embossMaskFilter;
     private String           typeFace;
+    private int              sharpTagTextColor;
+    private int              atTagTextColor;
+    private int              urlStringColor;
+    private int              regExTextColor;
 
     // '#' tag
     private boolean         enableSharpTagMatcher;
@@ -407,6 +465,10 @@ public class SpannableTextView
       this.urlClickSpan = null;
       this.customRegExString = null;
       this.customClickSpan = null;
+      this.sharpTagTextColor = -1;
+      this.atTagTextColor = -1;
+      this.urlStringColor = -1;
+      this.regExTextColor = -1;
     }
 
     /**
@@ -631,12 +693,28 @@ public class SpannableTextView
     public Span findSharpTags(@Nullable SwClickableSpan clickableSpan) {
       this.enableSharpTagMatcher = true;
       this.sharpTagClickSpan = clickableSpan;
+      this.sharpTagTextColor = -1;
+      return this;
+    }
+
+    public Span findSharpTags(@ColorInt int sharpTagTextColor) {
+      this.enableSharpTagMatcher = true;
+      this.sharpTagTextColor = sharpTagTextColor;
+      this.sharpTagClickSpan = null;
       return this;
     }
 
     public Span findAtTags(@Nullable SwClickableSpan clickableSpan) {
       this.enableAtTagMatcher = true;
       this.atTagClickSpan = clickableSpan;
+      this.atTagTextColor = -1;
+      return this;
+    }
+
+    public Span findAtTags(@ColorInt int atTagTextColor) {
+      this.enableAtTagMatcher = true;
+      this.atTagTextColor = atTagTextColor;
+      this.atTagClickSpan = null;
       return this;
     }
 
@@ -646,9 +724,24 @@ public class SpannableTextView
       return this;
     }
 
+    public Span findURLstrings(@ColorInt int urlStringColor) {
+      this.enableURLMatcher = true;
+      this.urlStringColor = urlStringColor;
+      this.urlClickSpan = null;
+      return this;
+    }
+
     public Span findRegExStrings(@NonNull String regEx, @Nullable SwClickableSpan clickableSpan) {
       this.customRegExString = regEx;
       this.customClickSpan = clickableSpan;
+      this.regExTextColor = -1;
+      return this;
+    }
+
+    public Span findRegExStrings(@NonNull String regEx, @ColorInt int regExTextColor) {
+      this.customRegExString = regEx;
+      this.regExTextColor = regExTextColor;
+      this.customClickSpan = null;
       return this;
     }
 

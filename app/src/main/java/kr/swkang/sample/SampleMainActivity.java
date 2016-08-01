@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.BlurMaskFilter;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.text.TextPaint;
 import android.view.View;
 import android.widget.Toast;
@@ -26,6 +27,7 @@ public class SampleMainActivity
 
     SpannableTextView stv1 = (SpannableTextView) findViewById(R.id.stv_1);
 
+    // Span인스턴스를 따로 만들고 관리 하는 방법.
     final SpannableTextView.Span span = new SpannableTextView.Span("Hello World!!! ")
         .textColor(Color.GRAY)
         .bold()
@@ -33,6 +35,7 @@ public class SampleMainActivity
         .build();
     stv1.addSpan(span);
 
+    // 바로 Span인스턴스를 생성하고 항목을 설정 하는 방법
     stv1.addSpan(
         new SpannableTextView.Span("\n반가워요!! ")
             .textColorRes(R.color.colorAccent)
@@ -46,6 +49,7 @@ public class SampleMainActivity
             .build()
     );
 
+    // 클릭 이벤트의 구현
     stv1.addSpan(
         new SpannableTextView.Span("(Click Link)")
             .click(
@@ -96,6 +100,7 @@ public class SampleMainActivity
 
     //stv1.clearSpans();
 
+    // 텍스트에 블러 마스크 추가
     SpannableTextView stv2 = (SpannableTextView) findViewById(R.id.stv_2);
     stv2.addSpan(
         new SpannableTextView.Span("Blurred Text (Normal)")
@@ -126,13 +131,7 @@ public class SampleMainActivity
             .textSizeSP(12)
             .textColor(Color.GRAY)
             .findSharpTags(
-                // normal text color, pressed text color, pressed bg color
-                new SwClickableSpan(Color.BLACK, Color.RED, Color.LTGRAY) {
-                  @Override
-                  public void onClick(View widget) {
-                    Toast.makeText(SampleMainActivity.this, "# Tag clicked..", Toast.LENGTH_SHORT).show();
-                  }
-                }
+                Color.RED
             )
             .findAtTags(
                 // normal text color, pressed text color
